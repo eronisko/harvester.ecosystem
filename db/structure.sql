@@ -1964,6 +1964,36 @@ CREATE SEQUENCE street_names_id_seq
 ALTER SEQUENCE street_names_id_seq OWNED BY street_names.id;
 
 
+--
+-- Name: versions; Type: TABLE; Schema: ra; Owner: -
+--
+
+CREATE TABLE versions (
+    id integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: versions_id_seq; Type: SEQUENCE; Schema: ra; Owner: -
+--
+
+CREATE SEQUENCE versions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: versions_id_seq; Type: SEQUENCE OWNED BY; Schema: ra; Owner: -
+--
+
+ALTER SEQUENCE versions_id_seq OWNED BY versions.id;
+
+
 SET search_path = rpo, pg_catalog;
 
 --
@@ -3879,6 +3909,13 @@ ALTER TABLE ONLY street_name_changes ALTER COLUMN id SET DEFAULT nextval('street
 ALTER TABLE ONLY street_names ALTER COLUMN id SET DEFAULT nextval('street_names_id_seq'::regclass);
 
 
+--
+-- Name: id; Type: DEFAULT; Schema: ra; Owner: -
+--
+
+ALTER TABLE ONLY versions ALTER COLUMN id SET DEFAULT nextval('versions_id_seq'::regclass);
+
+
 SET search_path = rpo, pg_catalog;
 
 --
@@ -4605,6 +4642,14 @@ ALTER TABLE ONLY street_name_changes
 
 ALTER TABLE ONLY street_names
     ADD CONSTRAINT street_names_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: versions_pkey; Type: CONSTRAINT; Schema: ra; Owner: -
+--
+
+ALTER TABLE ONLY versions
+    ADD CONSTRAINT versions_pkey PRIMARY KEY (id);
 
 
 SET search_path = rpo, pg_catalog;
@@ -6838,4 +6883,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170503203539'),
 ('20170506104022'),
 ('20170506190014'),
-('20170513200748');
+('20170513200748'),
+('20170515064732');
+
+

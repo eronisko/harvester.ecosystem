@@ -27,6 +27,7 @@ RSpec.describe Ra::FetchChangesBatchJob, type: :job do
         district_id: 4697,
 
         change: Ra::Change.find(60195291),
+        version: Ra::Version.find(5245180),
         property_registration_number_object: Ra::PropertyRegistrationNumber.find(585020),
         municipality: Ra::Municipality.find(2889),
         district: Ra::District.find(4697),
@@ -59,6 +60,7 @@ RSpec.describe Ra::FetchChangesBatchJob, type: :job do
         street_name_id: nil,
 
         change: Ra::Change.find(60195314),
+        version: Ra::Version.find(5207552),
         building_number_object: Ra::BuildingNumber.find(2125309),
         property_registration_number: Ra::PropertyRegistrationNumber.find(585020),
       )
@@ -92,6 +94,7 @@ RSpec.describe Ra::FetchChangesBatchJob, type: :job do
         building_unit_label: 'byt',
 
         change: Ra::Change.find(60196464),
+        version: Ra::Version.find(5207552),
       )
 
       expect(Ra::ChangesBatch.first).to have_attributes(
@@ -124,6 +127,7 @@ RSpec.describe Ra::FetchChangesBatchJob, type: :job do
         street_name: 'Juraja Hronca',
 
         change: Ra::Change.find(19764348),
+        version: Ra::Version.find(5207552),
         municipalities: [Ra::Municipality.find(3000)],
         districts: [],
       )
@@ -150,6 +154,7 @@ RSpec.describe Ra::FetchChangesBatchJob, type: :job do
         effective_on: Date.parse('1996-07-24+02:00'),
 
         change: nil,
+        version: Ra::Version.find(5207552),
         region_object: Ra::Region.find(1),
       )
 
