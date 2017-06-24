@@ -25,10 +25,6 @@ Vagrant.configure("2") do |config|
     echo 'eval "$(rbenv init -)"' >> ~/.profile
     source ~/.profile
 
-    # export PATH="$HOME/.rbenv/bin:$PATH"
-    # export PATH="$HOME/.rbenv/plugins/ruby-build/bin:$PATH"
-    # eval "$(rbenv init -)"
-
     rbenv install 2.4.1
     rbenv global 2.4.1
     ruby -v
