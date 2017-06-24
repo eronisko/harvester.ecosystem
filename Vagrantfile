@@ -8,18 +8,6 @@ Vagrant.configure("2") do |config|
     vb.memory = "512"
   end
 
-  config.vm.provision "docker" do |d|
-    d.run "postgis",
-      image: "mdillon/postgis:9.5",
-      args: "-p 5432:5432 "\
-        "-e POSTGRES_PASSWORD=datahub "\
-        "-e POSTGRES_USER=datahub "\
-        "-e POSTGRES_DB=datahub_development "
-
-    d.run "redis",
-      args: "-p 6379:6379"
-  end
-
   config.vm.provision "shell", privileged: false, inline: <<-SHELL
     sudo apt-get install software-properties-common
     sudo apt-add-repository ppa:brightbox/ruby-ng
@@ -37,6 +25,22 @@ Vagrant.configure("2") do |config|
     # Install project gems
     cd /vagrant
     bundle install
+  SHELL
+
+  config.vm.provision "docker" do |d|
+    d.run "postgis",
+          image: "mdillon/postgis:9.5",
+          args: "-p 5432:5432 "\
+        "-e POSTGRES_PASSWORD=datahub "\
+        "-e POSTGRES_USER=datahub "\
+        "-e POSTGRES_DB=datahub_development "
+
+    d.run "redis",
+          args: "-p 6379:6379"
+  end
+
+  config.vm.provision "shell", privileged: false, inline: <<-SHELL
+    cd /vagrant
     bundle exec rake db:setup
   SHELL
 end
