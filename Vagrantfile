@@ -8,51 +8,35 @@ Vagrant.configure("2") do |config|
     vb.memory = "512"
   end
 
-  config.vm.provision "shell", privileged: false, inline: <<-SHELL
-    sudo apt-get update
-
-    # Install build dependencies
-    sudo apt-get install -y \
-      autoconf bison build-essential libssl-dev libyaml-dev libreadline6-dev \
-      zlib1g-dev libncurses5-dev libffi-dev libgdbm3 libgdbm-dev \
-      libpq-dev postgresql-client git-core
-
-    # Install ruby (via rbenv)
-    git clone https://github.com/rbenv/rbenv.git ~/.rbenv
-    git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
-    echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.profile
-    echo 'export PATH="$HOME/.rbenv/plugins/ruby-build/bin:$PATH"' >> ~/.profile
-    echo 'eval "$(rbenv init -)"' >> ~/.profile
-    source ~/.profile
-
-    rbenv install 2.4.1
-    rbenv global 2.4.1
-    ruby -v
-
-    gem install bundler
-    rbenv rehash
-
-    # Install project gems
-    cd /vagrant
-    bundle install
-    rbenv rehash
-  SHELL
-
   config.vm.provision "docker" do |d|
     d.run "postgis",
       image: "mdillon/postgis:9.5",
       args: "-p 5432:5432 "\
-      "-e POSTGRES_PASSWORD=datahub "\
-      "-e POSTGRES_USER=datahub "\
-      "-e POSTGRES_DB=datahub_development "
+        "-e POSTGRES_PASSWORD=datahub "\
+        "-e POSTGRES_USER=datahub "\
+        "-e POSTGRES_DB=datahub_development "
 
     d.run "redis",
       args: "-p 6379:6379"
   end
 
   config.vm.provision "shell", privileged: false, inline: <<-SHELL
-    # Load database schema
+    sudo apt-get install software-properties-common
+    sudo apt-add-repository ppa:brightbox/ruby-ng
+    sudo apt-get update
+
+    sudo apt-get install -y \
+      ruby2.4 ruby2.4-dev \
+      ruby-switch \
+      libpq-dev postgresql-client \
+
+    sudo ruby-switch --set ruby2.4
+
+    sudo gem install bundler
+
+    # Install project gems
     cd /vagrant
+    bundle install
     bundle exec rake db:setup
   SHELL
 end
